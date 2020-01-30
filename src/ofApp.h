@@ -18,5 +18,8 @@ public:
     int state;
 
 protected:
+    ofVideoGrabber camera;
+
+    void setupCamera();
     void drawRecordingIndicator(float x, float y, int recording_state);
 };
