@@ -1,6 +1,11 @@
 #include "ofApp.h"
 #include "ofxPS3EyeGrabber.h"
 
+void ofApp::exit() {
+    ofRemoveListener(this->videoRecorder.outputFileCompleteEvent, this, &ofApp::recordingComplete);
+    this->videoRecorder.close();
+}
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     this->tryLoadingPreferencesOrDefaults();
@@ -9,11 +14,59 @@ void ofApp::setup(){
     this->state = this->udp_thread->readState();
     this->udp_thread->start();
     this->setupCamera();
+
+    // use this is you have ffmpeg installed in your data folder
+    //this->videoRecorder.setFfmpegLocation(ofFilePath::getAbsolutePath("ffmpeg"));
+    this->video_filename = "test";
+    this->video_fileext = ".mp4";
+    // override the default codecs if you like
+    // run 'ffmpeg -codecs' to find out what your implementation supports (or -formats on some older versions)
+    this->videoRecorder.setVideoCodec("mpeg4");
+    this->videoRecorder.setVideoBitrate("800k");
+//    this->videoRecorder.setAudioCodec("mp3");
+//    this->videoRecorder.setAudioBitrate("192k");
+    ofAddListener(this->videoRecorder.outputFileCompleteEvent, this, &ofApp::recordingComplete);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    // check for messages from Matlab (UDP)
     this->state = this->udp_thread->readState();
+
+    // adjust recording to state changes
+    switch (state){
+        case 1: // record
+            if (!this->videoRecorder.isInitialized()) {
+                this->videoRecorder.setup(this->video_filename+ofGetTimestampString() + this->video_fileext, this->camera.getWidth(), this->camera.getHeight(), 30);
+//                this->videoRecorder.setup(fileName+ofGetTimestampString()+fileExt, vidGrabber.getWidth(), vidGrabber.getHeight(), 30); // no audio
+//                this->videoRecorder.setup(fileName+ofGetTimestampString()+fileExt, 0,0,0, sampleRate, channels); // no video
+//                this->videoRecorder.setupCustomOutput(vidGrabber.getWidth(), vidGrabber.getHeight(), 30, sampleRate, channels, "-vcodec mpeg4 -b 1600k -acodec mp2 -ab 128k -f mpegts udp://localhost:1234"); // for custom ffmpeg output string (streaming, etc)
+
+                // Start recording
+                this->videoRecorder.start();
+            } else if (this->videoRecorder.isInitialized()) {
+                this->videoRecorder.setPaused(false);
+            }
+            break;
+        case 0: // stop recording
+            this->videoRecorder.close();
+            break;
+        case 2:
+            if(this->videoRecorder.isInitialized()) {
+                this->videoRecorder.setPaused(true);
+            }
+    }
+
+    // update camera
+    this->camera.update();
+
+    // save current frame to video file
+    if(this->camera.isFrameNew() && (this->state == 1)){
+        bool success = this->videoRecorder.addFrame(this->camera.getPixels());
+        if (!success) {
+            ofLogWarning("This frame was not added!");
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -42,6 +95,18 @@ void ofApp::windowResized(int w, int h){
 void ofApp::gotMessage(ofMessage msg){
 
 }
+
+//--------------------------------------------------------------
+void ofApp::recordingComplete(ofxVideoRecorderOutputFileCompleteEventArgs& args){
+    cout << "The recoded video file is now complete." << endl;
+}
+
+//--------------------------------------------------------------
+//void ofApp::audioIn(float *input, int bufferSize, int nChannels){
+//    if (state == 1) {
+//        this->videoRecorder.addAudioSamples(input, bufferSize, nChannels);
+//    }
+//}
 
 void ofApp::drawRecordingIndicator(float x, float y, int recording_state) {
     if (recording_state == 1) {

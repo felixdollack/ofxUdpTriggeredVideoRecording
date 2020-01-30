@@ -2,4 +2,6 @@ ofxKinect
 ofxNetwork
 ofxOpenCv
 ofxPS3EyeGrabber
+ofxPoco
+ofxVideoRecorder
 ofxXmlSettings
