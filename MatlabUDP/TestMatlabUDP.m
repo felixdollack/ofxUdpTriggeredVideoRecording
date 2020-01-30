@@ -25,11 +25,13 @@ if( TEST_READER ),
 else
     %% create and test UDP sender
     sender_args.port    = 4245; % port which the android device addresses
-    sender_args.ip      = '139.13.130.197'; % IP to send the message to
+    sender_args.ip      = '127.0.0.1'; % IP to send the message to
     
     % create UDP object and get function handles
     sender   = MatlabUDP( sender_args );
-    sender.write( 'Hello Server!' );        % send message to server
+    sender.write( '1' );        % send message to start recording
+    pause(0.5);
+    sender.write( '0' );        % send message to stop recording
 end
 %--------------------Licence ---------------------------------------------
 % Copyright (c) <2014> Felix Dollack
