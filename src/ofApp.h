@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxXmlSettings.h"
 #include "udpReceiverThread.hpp"
 
 class ofApp : public ofBaseApp{
@@ -18,8 +19,19 @@ public:
     int state;
 
 protected:
-    ofVideoGrabber camera;
+    ofxXmlSettings* settings;
+    int udp_port;
+    ofColor background_color;
+    int radiusRecordingIndicator;
+    float xRecordingIndicator, yRecordingIndicator;
 
+    ofVideoGrabber camera;
+    int desiredCameraFrameRate;
+    int cameraWidth, cameraHeight;
+
+    void tryLoadingPreferencesOrDefaults();
+    void setDefaultSettings();
+    void unpackSettings();
     void setupCamera();
     void drawRecordingIndicator(float x, float y, int recording_state);
 };
