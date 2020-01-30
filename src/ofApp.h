@@ -16,4 +16,7 @@ public:
 
     UdpReceiverThread* udp_thread;
     int state;
+
+protected:
+    void drawRecordingIndicator(float x, float y, int recording_state);
 };
