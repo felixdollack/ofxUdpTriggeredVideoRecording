@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "udpReceiverThread.hpp"
 
 class ofApp : public ofBaseApp{
 
@@ -13,5 +14,7 @@ class ofApp : public ofBaseApp{
 		void keyReleased(int key);
 		void windowResized(int w, int h);
 		void gotMessage(ofMessage msg);
-		
+
+        UdpReceiverThread* udp_thread;
+        int state;
 };

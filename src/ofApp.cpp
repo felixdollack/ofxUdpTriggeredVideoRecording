@@ -2,12 +2,14 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
+    this->udp_thread = new UdpReceiverThread(4245);
+    this->state = this->udp_thread->readState();
+    this->udp_thread->start();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    this->state = this->udp_thread->readState();
 }
 
 //--------------------------------------------------------------
