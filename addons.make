@@ -1,6 +1,4 @@
-ofxKinect
 ofxNetwork
-ofxOpenCv
 ofxPoco
 ofxVideoRecorder
 ofxXmlSettings
