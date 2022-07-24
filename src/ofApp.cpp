@@ -160,46 +160,46 @@ void ofApp::tryLoadingPreferencesOrDefaults() {
 void ofApp::setDefaultSettings() {
     // write layout settings
     this->background_color = ofColor(200, 200, 200);
-    this->settings->setValue("inhibitionExperiment:color:background:red",   this->background_color.r);
-    this->settings->setValue("inhibitionExperiment:color:background:green", this->background_color.g);
-    this->settings->setValue("inhibitionExperiment:color:background:blue",  this->background_color.b);
+    this->settings->setValue("setting:color:background:red",   this->background_color.r);
+    this->settings->setValue("setting:color:background:green", this->background_color.g);
+    this->settings->setValue("setting:color:background:blue",  this->background_color.b);
     this->radiusRecordingIndicator = 15;
-    this->settings->setValue("inhibitionExperiment:layout:recIndicator:radius",  this->radiusRecordingIndicator);
+    this->settings->setValue("setting:layout:recIndicator:radius",  this->radiusRecordingIndicator);
     this->xRecordingIndicator = 100;
-    this->settings->setValue("inhibitionExperiment:layout:recIndicator:x",  this->xRecordingIndicator);
+    this->settings->setValue("setting:layout:recIndicator:x",  this->xRecordingIndicator);
     this->yRecordingIndicator = 100;
-    this->settings->setValue("inhibitionExperiment:layout:recIndicator:y",  this->yRecordingIndicator);
+    this->settings->setValue("setting:layout:recIndicator:y",  this->yRecordingIndicator);
 
     // write matlab network settings
     this->udp_port = 4245;
-    this->settings->setValue("inhibitionExperiment:network:udpPort", this->udp_port);
+    this->settings->setValue("setting:network:udpPort", this->udp_port);
 
     // write camera settings
     this->desiredCameraFrameRate = 30;//75;
-    this->settings->setValue("inhibitionExperiment:camera:fps",    this->desiredCameraFrameRate);
+    this->settings->setValue("setting:camera:fps",    this->desiredCameraFrameRate);
     this->cameraWidth  = 640;
-    this->settings->setValue("inhibitionExperiment:camera:width",  this->cameraWidth);
+    this->settings->setValue("setting:camera:width",  this->cameraWidth);
     this->cameraHeight = 480;
-    this->settings->setValue("inhibitionExperiment:camera:height", this->cameraHeight);
+    this->settings->setValue("setting:camera:height", this->cameraHeight);
 }
 
 void ofApp::unpackSettings() {
     int r,g,b;
     // unpack settings
     // read layout settings
-    r = this->settings->getValue("inhibitionExperiment:color:background:red",   0);
-    g = this->settings->getValue("inhibitionExperiment:color:background:green", 0);
-    b = this->settings->getValue("inhibitionExperiment:color:background:blue",  0);
+    r = this->settings->getValue("setting:color:background:red",   0);
+    g = this->settings->getValue("setting:color:background:green", 0);
+    b = this->settings->getValue("setting:color:background:blue",  0);
     this->background_color = ofColor(r, g, b);
-    this->radiusRecordingIndicator = this->settings->getValue("inhibitionExperiment:layout:recIndicator:radius", 0);
-    this->xRecordingIndicator = this->settings->getValue("inhibitionExperiment:layout:recIndicator:x", 0);
-    this->yRecordingIndicator = this->settings->getValue("inhibitionExperiment:layout:recIndicator:y", 0);
+    this->radiusRecordingIndicator = this->settings->getValue("setting:layout:recIndicator:radius", 0);
+    this->xRecordingIndicator = this->settings->getValue("setting:layout:recIndicator:x", 0);
+    this->yRecordingIndicator = this->settings->getValue("setting:layout:recIndicator:y", 0);
 
     // read matlab network settings
-    this->udp_port = this->settings->getValue("inhibitionExperiment:network:udpPort", 0);
+    this->udp_port = this->settings->getValue("setting:network:udpPort", 0);
 
     // read camera settings
-    this->desiredCameraFrameRate = this->settings->getValue("inhibitionExperiment:camera:fps", 25);
-    this->cameraWidth  = this->settings->getValue("inhibitionExperiment:camera:width",  640);
-    this->cameraHeight = this->settings->getValue("inhibitionExperiment:camera:height", 480);
+    this->desiredCameraFrameRate = this->settings->getValue("setting:camera:fps", 25);
+    this->cameraWidth  = this->settings->getValue("setting:camera:width",  640);
+    this->cameraHeight = this->settings->getValue("setting:camera:height", 480);
 }
