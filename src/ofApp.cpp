@@ -8,6 +8,7 @@ void ofApp::exit() {
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    ofSetEscapeQuitsApp(false);
     this->tryLoadingPreferencesOrDefaults();
 
     this->udp_thread = new UdpReceiverThread(this->udp_port);
@@ -78,7 +79,9 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if (key == 'q') {
+        ofExit();
+    }
 }
 
 //--------------------------------------------------------------
