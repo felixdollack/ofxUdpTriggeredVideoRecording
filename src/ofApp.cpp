@@ -1,5 +1,4 @@
 #include "ofApp.h"
-#include "ofxPS3EyeGrabber.h"
 
 void ofApp::exit() {
     ofRemoveListener(this->videoRecorder.outputFileCompleteEvent, this, &ofApp::recordingComplete);
