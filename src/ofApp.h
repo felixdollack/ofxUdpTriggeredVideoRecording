@@ -16,7 +16,7 @@ public:
     void keyReleased(int key);
     void windowResized(int w, int h);
     void gotMessage(ofMessage msg);
-
+    void audioIn(float *input, int bufferSize, int nChannels);
     UdpReceiverThread* udp_thread;
     int state;
 
@@ -28,6 +28,7 @@ protected:
     float xRecordingIndicator, yRecordingIndicator;
 
     ofVideoGrabber camera;
+    int cameraID;
     int desiredCameraFrameRate;
     int cameraWidth, cameraHeight;
 

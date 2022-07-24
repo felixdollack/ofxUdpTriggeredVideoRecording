@@ -24,8 +24,8 @@ void ofApp::setup(){
     // run 'ffmpeg -codecs' to find out what your implementation supports (or -formats on some older versions)
     this->videoRecorder.setVideoCodec("mpeg4");
     this->videoRecorder.setVideoBitrate("800k");
-//    this->videoRecorder.setAudioCodec("mp3");
-//    this->videoRecorder.setAudioBitrate("192k");
+    this->videoRecorder.setAudioCodec("mp3");
+    this->videoRecorder.setAudioBitrate("192k");
     ofAddListener(this->videoRecorder.outputFileCompleteEvent, this, &ofApp::recordingComplete);
 }
 
@@ -105,11 +105,11 @@ void ofApp::recordingComplete(ofxVideoRecorderOutputFileCompleteEventArgs& args)
 }
 
 //--------------------------------------------------------------
-//void ofApp::audioIn(float *input, int bufferSize, int nChannels){
-//    if (state == 1) {
-//        this->videoRecorder.addAudioSamples(input, bufferSize, nChannels);
-//    }
-//}
+void ofApp::audioIn(float *input, int bufferSize, int nChannels){
+    if (state == 1) {
+        this->videoRecorder.addAudioSamples(input, bufferSize, nChannels);
+    }
+}
 
 void ofApp::drawRecordingIndicator(float x, float y, int recording_state) {
     if (recording_state == 1) {
@@ -124,19 +124,27 @@ void ofApp::drawRecordingIndicator(float x, float y, int recording_state) {
 }
 
 void ofApp::setupCamera() {
-    // Set the custom ofxPS3EyeGrabber.
-    this->camera.setGrabber(std::make_shared<ofxPS3EyeGrabber>());
+    vector<ofVideoDevice> list = this->camera.listDevices();
+    if (list.size() > 0) {
+        cameraID = 0;
+    }
+    for (int kk=0; kk<list.size(); kk++) {
+        if (list[kk].deviceName == "HD Webcam C615") {
+            cameraID = list[kk].id;
+            break;
+        }
+    }
+    //grabber.setGrabber();
+    this->camera.setDeviceID(cameraID);
 
     // The native pixel format for the ofxPS3EyeGrabber is a Bayer pattern
     // (it will look black and white).
-    this->camera.setPixelFormat(OF_PIXELS_NATIVE);
+    //this->camera.setPixelFormat(OF_PIXELS_NATIVE);
     this->camera.setDesiredFrameRate(this->desiredCameraFrameRate);
     this->camera.setup(this->cameraWidth, this->cameraHeight);
 
-    // These are examples of ofxPS3EyeGrabber-specific paramaters.
-    // These must be set after the grabber is set up.
-    this->camera.getGrabber<ofxPS3EyeGrabber>()->setAutogain(true);
-    this->camera.getGrabber<ofxPS3EyeGrabber>()->setAutoWhiteBalance(true);
+    //this->camera.getGrabber()->setAutogain(true);
+    //this->camera.getGrabber()->setAutoWhiteBalance(true);
 }
 
 void ofApp::tryLoadingPreferencesOrDefaults() {
@@ -168,7 +176,7 @@ void ofApp::setDefaultSettings() {
     this->settings->setValue("inhibitionExperiment:network:udpPort", this->udp_port);
 
     // write camera settings
-    this->desiredCameraFrameRate = 75;
+    this->desiredCameraFrameRate = 30;//75;
     this->settings->setValue("inhibitionExperiment:camera:fps",    this->desiredCameraFrameRate);
     this->cameraWidth  = 640;
     this->settings->setValue("inhibitionExperiment:camera:width",  this->cameraWidth);
