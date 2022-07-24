@@ -1,0 +1,3 @@
+[submodule "MatlabUDP"]
+	path = MatlabUDP
+	url = git@github.com:felixdollack/MatlabUDP.git
