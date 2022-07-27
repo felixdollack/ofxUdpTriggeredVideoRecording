@@ -59,10 +59,12 @@ void ofApp::update(){
         case 0: // stop recording
             this->videoRecorder.close();
             break;
-        case 2:
-            if(this->videoRecorder.isInitialized()) {
-                this->videoRecorder.setPaused(true);
-            }
+//        case 2: // untested
+//            if(this->videoRecorder.isInitialized()) {
+//                this->videoRecorder.setPaused(true);
+//            }
+        default:
+            break;
     }
 
     // update camera
