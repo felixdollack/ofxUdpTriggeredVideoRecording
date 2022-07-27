@@ -34,15 +34,21 @@ The progam awaits 1 of the follwing string messages:
 
 - 0
 - 1
-- -1
 
 If a 1 is received, the indicator will be set to dark red and start the video recording.
 
 Receiving a 0, will stop the video recording.
 
-The -1 message has currently no function.
-
 The UDP port is 4245 by default.
+
+
+You can test this quickly bby running the OF program and then call:
+
+```
+python send_msg.py 1 # start recording
+# or
+python send_msg.py 0 # stop reacording
+```
 
 
 ## Settings
