@@ -2,8 +2,8 @@
 
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
-#include "udpReceiverThread.hpp"
 #include "ofxVideoRecorder.h"
+#include "ofxUDPManager.h"
 
 class ofApp : public ofBaseApp{
 public:
@@ -17,8 +17,8 @@ public:
     void windowResized(int w, int h);
     void gotMessage(ofMessage msg);
     void audioIn(float *input, int bufferSize, int nChannels);
-    UdpReceiverThread* udp_thread;
     int state;
+    ofxUDPManager udpConnection;
 
 protected:
     ofxXmlSettings* settings;

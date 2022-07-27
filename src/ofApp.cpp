@@ -9,10 +9,13 @@ void ofApp::exit() {
 void ofApp::setup(){
     ofSetEscapeQuitsApp(false);
     this->tryLoadingPreferencesOrDefaults();
+    this->state = 0;
+    //create the socket and bind to port
+    // https://openframeworks.cc/documentation/ofxNetwork/ofxUDPManager
+    udpConnection.Create();
+    udpConnection.Bind(4245);
+    udpConnection.SetNonBlocking(true);
 
-    this->udp_thread = new UdpReceiverThread(this->udp_port);
-    this->state = this->udp_thread->readState();
-    this->udp_thread->start();
     this->setupCamera();
 
     // use this is you have ffmpeg installed in your data folder
@@ -31,7 +34,12 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     // check for messages from Matlab (UDP)
-    this->state = this->udp_thread->readState();
+    char udpMessage[256];
+    udpConnection.Receive(udpMessage,256);
+    string message = udpMessage;
+    if (message.length() == 1){
+        this->state = ofToInt(message);
+    }
 
     // adjust recording to state changes
     switch (state){
