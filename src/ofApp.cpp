@@ -82,7 +82,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground(this->background_color);
-    this->camera.draw(0, 0, 1280,720); // set frame draw size to match ofx window (might look distorted)
+    this->camera.draw(0, 0, windowWidth, windowHeight); // set frame draw size to match ofx window (might look distorted)
     this->drawRecordingIndicator(this->xRecordingIndicator, this->yRecordingIndicator, this->state);
 }
 
@@ -100,7 +100,8 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
+    windowWidth = w;
+    windowHeight = h;
 }
 
 //--------------------------------------------------------------

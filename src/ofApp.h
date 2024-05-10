@@ -21,6 +21,8 @@ public:
     ofxUDPManager udpConnection;
 
 protected:
+    float windowWidth = 1280;
+    float windowHeight = 720;
     ofxXmlSettings* settings;
     int udp_port;
     ofColor background_color;
