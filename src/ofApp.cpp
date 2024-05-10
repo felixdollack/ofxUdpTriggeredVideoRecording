@@ -158,11 +158,11 @@ void ofApp::setupCamera() {
 
 void ofApp::tryLoadingPreferencesOrDefaults() {
     this->settings = new ofxXmlSettings();
-    bool success = this->settings->loadFile("settings.xml");
+    bool success = this->settings->load("settings.xml");
     if (!success) {
         // set standard values and save settings
         this->setDefaultSettings();
-        this->settings->saveFile("settings.xml");
+        this->settings->save("settings.xml");
     }
     this->unpackSettings();
 }
