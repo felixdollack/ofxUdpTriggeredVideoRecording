@@ -20,7 +20,7 @@ void ofApp::setup(){
 
     // use this is you have ffmpeg installed in your data folder
     //this->videoRecorder.setFfmpegLocation(ofFilePath::getAbsolutePath("ffmpeg"));
-    this->video_filename = "test";
+    this->video_filename = "video_";
     this->video_fileext = ".mp4";
     // override the default codecs if you like
     // run 'ffmpeg -codecs' to find out what your implementation supports (or -formats on some older versions)
@@ -45,7 +45,7 @@ void ofApp::update(){
     switch (state){
         case 1: // record
             if (!this->videoRecorder.isInitialized()) {
-                this->videoRecorder.setup(this->video_filename+ofGetTimestampString() + this->video_fileext, this->camera.getWidth(), this->camera.getHeight(), 30);
+                this->videoRecorder.setup(this->video_filename+ofGetTimestampString() + this->video_fileext, this->camera.getWidth(), this->camera.getHeight(), this->desiredCameraFrameRate);
 //                this->videoRecorder.setup(fileName+ofGetTimestampString()+fileExt, vidGrabber.getWidth(), vidGrabber.getHeight(), 30); // no audio
 //                this->videoRecorder.setup(fileName+ofGetTimestampString()+fileExt, 0,0,0, sampleRate, channels); // no video
 //                this->videoRecorder.setupCustomOutput(vidGrabber.getWidth(), vidGrabber.getHeight(), 30, sampleRate, channels, "-vcodec mpeg4 -b 1600k -acodec mp2 -ab 128k -f mpegts udp://localhost:1234"); // for custom ffmpeg output string (streaming, etc)
@@ -82,7 +82,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground(this->background_color);
-    this->camera.draw(0, 0);
+    this->camera.draw(0, 0, 1280,720); // set frame draw size to match ofx window (might look distorted)
     this->drawRecordingIndicator(this->xRecordingIndicator, this->yRecordingIndicator, this->state);
 }
 
@@ -133,12 +133,14 @@ void ofApp::drawRecordingIndicator(float x, float y, int recording_state) {
 }
 
 void ofApp::setupCamera() {
+    auto desiredDevice = "HD Webcam C615";
+    
     vector<ofVideoDevice> list = this->camera.listDevices();
     if (list.size() > 0) {
         cameraID = 0;
     }
     for (int kk=0; kk<list.size(); kk++) {
-        if (list[kk].deviceName == "HD Webcam C615") {
+        if (list[kk].deviceName == desiredDevice) {
             cameraID = list[kk].id;
             break;
         }
