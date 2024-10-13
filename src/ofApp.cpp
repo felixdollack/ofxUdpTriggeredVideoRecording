@@ -7,6 +7,8 @@ void ofApp::exit() {
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    this->initializeCounter = 0;
+    this->recordCounter = 0;
     ofSetEscapeQuitsApp(false);
     this->tryLoadingPreferencesOrDefaults();
     this->state = 0;
@@ -31,6 +33,32 @@ void ofApp::setup(){
     ofAddListener(this->videoRecorder.outputFileCompleteEvent, this, &ofApp::recordingComplete);
 }
 
+void ofApp::startRecording() {
+    if (!this->videoRecorder.isInitialized()) {
+        assert(this->initializeCounter < 2);
+        this->videoRecorder.setup(ofFilePath::getAbsolutePath(this->video_filename+ofGetTimestampString() + this->video_fileext), this->camera.getWidth(), this->camera.getHeight(), this->desiredCameraFrameRate);
+//                this->videoRecorder.setup(fileName+ofGetTimestampString()+fileExt, vidGrabber.getWidth(), vidGrabber.getHeight(), 30); // no audio
+//                this->videoRecorder.setup(fileName+ofGetTimestampString()+fileExt, 0,0,0, sampleRate, channels); // no video
+//                this->videoRecorder.setupCustomOutput(vidGrabber.getWidth(), vidGrabber.getHeight(), 30, sampleRate, channels, "-vcodec mpeg4 -b 1600k -acodec mp2 -ab 128k -f mpegts udp://localhost:1234"); // for custom ffmpeg output string (streaming, etc)
+
+        // Start recording
+        this->videoRecorder.start();
+//                this->soundStream.start();
+        this->initializeCounter++;
+    } else if (this->videoRecorder.isInitialized()) {
+//        if (!this->videoRecorder.isRecording()){
+//            assert(this->recordCounter < 2);
+            this->videoRecorder.setPaused(false);
+            this->recordCounter++;
+//        }
+    }
+}
+
+void ofApp::stopRecording() {
+    //    this->soundStream.close();
+    this->videoRecorder.close();
+}
+
 //--------------------------------------------------------------
 void ofApp::update(){
     // check for messages from Matlab (UDP)
@@ -44,20 +72,10 @@ void ofApp::update(){
     // adjust recording to state changes
     switch (state){
         case 1: // record
-            if (!this->videoRecorder.isInitialized()) {
-                this->videoRecorder.setup(this->video_filename+ofGetTimestampString() + this->video_fileext, this->camera.getWidth(), this->camera.getHeight(), this->desiredCameraFrameRate);
-//                this->videoRecorder.setup(fileName+ofGetTimestampString()+fileExt, vidGrabber.getWidth(), vidGrabber.getHeight(), 30); // no audio
-//                this->videoRecorder.setup(fileName+ofGetTimestampString()+fileExt, 0,0,0, sampleRate, channels); // no video
-//                this->videoRecorder.setupCustomOutput(vidGrabber.getWidth(), vidGrabber.getHeight(), 30, sampleRate, channels, "-vcodec mpeg4 -b 1600k -acodec mp2 -ab 128k -f mpegts udp://localhost:1234"); // for custom ffmpeg output string (streaming, etc)
-
-                // Start recording
-                this->videoRecorder.start();
-            } else if (this->videoRecorder.isInitialized()) {
-                this->videoRecorder.setPaused(false);
-            }
+            startRecording();
             break;
         case 0: // stop recording
-            this->videoRecorder.close();
+            stopRecording();
             break;
 //        case 2: // untested
 //            if(this->videoRecorder.isInitialized()) {
@@ -90,6 +108,12 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
     if (key == 'q') {
         ofExit();
+    }
+    if (key == '1') {
+        this->state = 1;
+    }
+    if (key == '0') {
+        this->state = 0;
     }
 }
 

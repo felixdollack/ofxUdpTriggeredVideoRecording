@@ -37,6 +37,11 @@ protected:
     ofxVideoRecorder videoRecorder;
     string video_filename;
     string video_fileext;
+    
+    int initializeCounter, recordCounter;
+    
+    void startRecording();
+    void stopRecording();
 
     void tryLoadingPreferencesOrDefaults();
     void setDefaultSettings();
