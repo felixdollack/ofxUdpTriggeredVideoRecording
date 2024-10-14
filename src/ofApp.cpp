@@ -21,7 +21,7 @@ void ofApp::setup(){
     this->setupCamera();
 
     // use this is you have ffmpeg installed in your data folder
-    //this->videoRecorder.setFfmpegLocation(ofFilePath::getAbsolutePath("ffmpeg"));
+    this->videoRecorder.setFfmpegLocation(ofFilePath::getAbsolutePath("ffmpeg"));
     this->video_filename = "video_";
     this->video_fileext = ".mp4";
     // override the default codecs if you like
@@ -46,11 +46,11 @@ void ofApp::startRecording() {
 //                this->soundStream.start();
         this->initializeCounter++;
     } else if (this->videoRecorder.isInitialized()) {
-//        if (!this->videoRecorder.isRecording()){
-//            assert(this->recordCounter < 2);
+        if (!this->videoRecorder.isRecording()){
+            assert(this->recordCounter < 2);
             this->videoRecorder.setPaused(false);
             this->recordCounter++;
-//        }
+        }
     }
 }
 
