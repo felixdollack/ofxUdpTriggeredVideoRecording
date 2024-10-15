@@ -27,7 +27,7 @@ void ofApp::setup(){
     // override the default codecs if you like
     // run 'ffmpeg -codecs' to find out what your implementation supports (or -formats on some older versions)
     this->videoRecorder.setVideoCodec("mpeg4");
-    this->videoRecorder.setVideoBitrate("800k");
+    // this->videoRecorder.setVideoBitrate("800k");
     this->videoRecorder.setAudioCodec("mp3");
     this->videoRecorder.setAudioBitrate("192k");
     ofAddListener(this->videoRecorder.outputFileCompleteEvent, this, &ofApp::recordingComplete);
