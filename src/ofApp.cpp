@@ -158,8 +158,7 @@ void ofApp::drawRecordingIndicator(float x, float y, int recording_state) {
 }
 
 void ofApp::setupCamera() {
-    auto desiredDevice = "HD Webcam C615";
-    
+    auto desiredDevice = this->desiredCameraName;
     vector<ofVideoDevice> list = this->camera.listDevices();
     if (list.size() > 0) {
         cameraID = 0;
@@ -212,6 +211,8 @@ void ofApp::setDefaultSettings() {
     this->settings->setValue("setting:network:udpPort", this->udp_port);
 
     // write camera settings
+    this->desiredCameraName = "Default";//75;
+    this->settings->setValue("setting:camera:name",   this->desiredCameraName);
     this->desiredCameraFrameRate = 30;//75;
     this->settings->setValue("setting:camera:fps",    this->desiredCameraFrameRate);
     this->cameraWidth  = 640;
@@ -236,6 +237,7 @@ void ofApp::unpackSettings() {
     this->udp_port = this->settings->getValue("setting:network:udpPort", 0);
 
     // read camera settings
+    this->desiredCameraName = this->settings->getValue("setting:camera:name", "Default");
     this->desiredCameraFrameRate = this->settings->getValue("setting:camera:fps", 25);
     this->cameraWidth  = this->settings->getValue("setting:camera:width",  640);
     this->cameraHeight = this->settings->getValue("setting:camera:height", 480);

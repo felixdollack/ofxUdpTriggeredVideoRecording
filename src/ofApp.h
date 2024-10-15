@@ -31,6 +31,7 @@ protected:
 
     ofVideoGrabber camera;
     int cameraID;
+    string desiredCameraName;
     int desiredCameraFrameRate;
     int cameraWidth, cameraHeight;
 
